@@ -37,11 +37,14 @@ const Dashboard = (props) => {
   }, []);
 
   const [expandCard, setExpandCard] = useState();
-  const startOfMonth = moment().startOf("month").format("x");
-  const endOfMonth = moment().endOf("month").format("x");
+  const startOfMonth = moment().startOf("month").format("X");
+  const endOfMonth = moment().endOf("month").format("X");
 
-  const startOfDay = moment().startOf("Day").format("x");
-  const endOfDay = moment().endOf("Day").format("x");
+  const startOfDay = moment().startOf("Day").format("X");
+  const endOfDay = moment().endOf("Day").format("X");
+
+  console.log("DEBUG startOfDay: ", startOfDay);
+  console.log("DEBUG endOfDay: ", endOfDay);
 
   const totalCrisesInMonth = () => {
     const history = childInformation.history ? childInformation.history : [];
@@ -79,7 +82,10 @@ const Dashboard = (props) => {
 
   const tosseTime = childInformation.history
     .filter((item) => item.createdAt > startOfDay && item.createdAt < endOfDay)
-    .map((item) => moment(item.createdAt, "x").format("HH"));
+    .map((item) => moment(item.createdAt, "X").format("HH"));
+
+  console.log("DEBUG TOSSE AR: ", tosseArr);
+  console.log("DEBUG tosseTime: ", tosseTime);
 
   const chiadoArr = childInformation.history
     .filter((item) => item.createdAt > startOfDay && item.createdAt < endOfDay)
@@ -87,7 +93,7 @@ const Dashboard = (props) => {
 
   const chiadoTime = childInformation.history
     .filter((item) => item.createdAt > startOfDay && item.createdAt < endOfDay)
-    .map((item) => moment(item.createdAt, "x").format("HH"));
+    .map((item) => moment(item.createdAt, "X").format("HH"));
 
   const fluxoArArr = childInformation.history
     .filter((item) => item.createdAt > startOfDay && item.createdAt < endOfDay)
@@ -95,7 +101,7 @@ const Dashboard = (props) => {
 
   const fluxoArTime = childInformation.history
     .filter((item) => item.createdAt > startOfDay && item.createdAt < endOfDay)
-    .map((item) => moment(item.createdAt, "x").format("HH"));
+    .map((item) => moment(item.createdAt, "X").format("HH"));
 
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
