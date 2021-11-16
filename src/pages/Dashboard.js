@@ -23,14 +23,19 @@ import ar from "../assets/ar.svg";
 import bombinha from "../assets/bombinha.svg";
 import pulmao from "../assets/pulmao.svg";
 import tosse from "../assets/tosse.svg";
-
-import { API } from "aws-amplify";
-import * as queries from "../graphql/queries";
+import { fetchChildInformation } from "../services/firebase";
 
 const Dashboard = (props) => {
   const [childInformation, setChildInformation] = useState(
     JSON.parse(localStorage.getItem("childInformation"))
   );
+
+  useEffect(() => {
+    fetchChildInformation((childInformation) =>
+      setChildInformation(childInformation)
+    );
+  }, []);
+
   const [expandCard, setExpandCard] = useState();
   const startOfMonth = moment().startOf("month").format("x");
   const endOfMonth = moment().endOf("month").format("x");
@@ -63,29 +68,6 @@ const Dashboard = (props) => {
 
     return age;
   };
-
-  const fetchChildInformation = async () => {
-    try {
-      const request = await API.graphql({
-        query: queries.getChild,
-        variables: { id: "0b3f25f8-964e-4557-8985-3b4d7626d6a6" },
-      });
-      const childRequest = await request.data.getChild;
-      localStorage.setItem("childInformation", JSON.stringify(childRequest));
-
-      return childRequest;
-    } catch (error) {
-      console.log("Error fetching child Information: ", error);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const request = await fetchChildInformation();
-      setChildInformation(request);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   const crises = childInformation?.history
     .filter((historyItem) => historyItem.asthmaAttack > 0)

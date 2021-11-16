@@ -41,7 +41,7 @@ const CrisesWrapper = (props) => {
               ? Math.round((crisis.tosse / 3) * 100)
               : 0;
             return (
-              <ExpansiveCard id={crisis.createdAt} date={crisis.createdAt}>
+              <ExpansiveCard id={crisis.createdAt} key={crisis.createdAt} date={crisis.createdAt}>
                 <Row>
                   <div style={{ margin: 16 }}>
                     <p

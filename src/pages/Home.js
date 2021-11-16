@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardTitle,
@@ -13,9 +13,7 @@ import ChildStatus from "../components/ChildStatus";
 import { Box } from "@material-ui/core";
 import barGraph from "../assets/barGraph.svg";
 import hearth from "../assets/hearth.svg";
-
-import { API } from "aws-amplify";
-import * as queries from "../graphql/queries";
+import { fetchChildInformation } from "../services/firebase";
 
 // function to show child status
 // Tosse Leve, Fluxo de Ar leve = 1
@@ -65,37 +63,19 @@ const getStatusColor = (status) => {
   }
 };
 
-const fetchChildInformation = async () => {
-  try {
-    const request = await API.graphql({
-      query: queries.getChild,
-      variables: { id: "0b3f25f8-964e-4557-8985-3b4d7626d6a6" },
-    });
-    const childRequest = await request.data.getChild;
-    localStorage.setItem("childInformation", JSON.stringify(childRequest));
-
-    return childRequest;
-  } catch (error) {
-    console.log("Error fetching child Information: ", error);
-  }
-};
-
 const Home = () => {
   const [childInformation, setChildInformation] = useState(
     JSON.parse(localStorage.getItem("childInformation"))
   );
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const request = await fetchChildInformation();
-      setChildInformation(request);
-    }, 3000);
-    return () => clearInterval(interval);
+    fetchChildInformation((childInformation) =>
+      setChildInformation(childInformation)
+    );
   }, []);
 
   return (
     <>
-      {console.log(getStatus(childInformation.status))}
       <Header />
       <Box m={2}>
         <Card disableNavigation>
